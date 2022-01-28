@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\UserRegistrationRequest;
 use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -23,16 +24,13 @@ class AuthController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param UserLoginRequest $request
      * @return RedirectResponse
      */
-    public function login(Request $request): RedirectResponse
+    public function login(UserLoginRequest $request): RedirectResponse
     {
         // validate the form data
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        $credentials = $request->validated();
         // attempt to login with the given credentials
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -56,18 +54,13 @@ class AuthController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param UserRegistrationRequest $request
      * @return RedirectResponse
      */
-    public function register(Request $request): RedirectResponse
+    public function register(UserRegistrationRequest $request): RedirectResponse
     {
         // validate the form data
-        $data = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed'],
-            'name' => ['required', 'string'],
-            'phone' => ['required', 'string']
-        ]);
+        $data = $request->validated();
 
         try {
             // add the user to the users table
@@ -82,7 +75,7 @@ class AuthController extends Controller
             Log::error($exception->getMessage());
             Log::error($exception->getTraceAsString());
 
-            return redirect()->route('home')->withErrors(['error' => 'cannot register']);
+            return redirect()->route('auth.registration')->withErrors(['error' => 'cannot register']);
         }
     }
 
@@ -97,6 +90,6 @@ class AuthController extends Controller
         Auth::logout();
 
         // redirect to the home page
-        return redirect('/');
+        return redirect()->route('home');
     }
 }

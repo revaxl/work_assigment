@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserUpdateRequest;
 use App\Repositories\UserRepository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -32,16 +32,12 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param UserUpdateRequest $request
      * @return RedirectResponse
      */
-    public function update(Request $request): RedirectResponse
+    public function update(UserUpdateRequest $request): RedirectResponse
     {
-        $data = $request->validate([
-            'name' => ['required', 'string'],
-            'email' => ['required', 'email'],
-            'phone' => ['required', 'string']
-        ]);
+        $data = $request->validated();
         try {
             throw_unless($this->userRepository->updateById(Auth::id(), $data), \Exception::class);
 
