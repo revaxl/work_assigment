@@ -107,11 +107,14 @@
                         required
                     />
                 </div>
-                <div class="flex items-center">
+                <div class="flex items-center justify-between">
                     <button
                         class="px-4 py-2 rounded text-white inline-block shadow-lg bg-blue-500 hover:bg-blue-600 focus:bg-blue-700"
                         type="submit">Register
                     </button>
+                    <a href="{{ route('home') }}">
+                        Log in
+                    </a>
                 </div>
             </form>
         </div>

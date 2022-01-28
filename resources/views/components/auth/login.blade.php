@@ -58,11 +58,14 @@
                     autocomplete="current-password"
                 />
             </div>
-            <div class="flex items-center">
+            <div class="flex items-center justify-between">
                 <button
                     class="px-4 py-2 rounded text-white inline-block shadow-lg bg-blue-500 hover:bg-blue-600 focus:bg-blue-700"
                     type="submit">Log In
                 </button>
+                <a href="{{ route('auth.registerForm') }}">
+                    Register
+                </a>
             </div>
         </form>
     </div>
