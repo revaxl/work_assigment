@@ -55,5 +55,16 @@ RUN sed -E -i 's/expose_php = On/expose_php = Off/' ${PHP_INI_DIR}/php.ini
 RUN sed -E -i 's/ServerTokens OS/ServerTokens Prod/' /etc/apache2/conf-enabled/security.conf
 RUN sed -E -i 's/ServerSignature On/ServerSignature Off/' /etc/apache2/conf-enabled/security.conf
 
+# ADD env file
+RUN cp .env.local .env
+
+# ADD app key
+RUN php artisan key:generate
+
+# Add sqlite database
+RUN touch database/database.sqlite && \
+  chmod 755 database/database.sqlite && chown -R www-data:www-data database/database.sqlite
+RUN php artisan migrate
+
 # Run the tests to make sure the app is working fine
 RUN php artisan test
