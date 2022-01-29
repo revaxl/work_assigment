@@ -75,7 +75,7 @@ class AuthController extends Controller
             Log::error($exception->getMessage());
             Log::error($exception->getTraceAsString());
 
-            return redirect()->route('auth.registration')->withErrors(['error' => 'cannot register']);
+            return redirect()->route('auth.registerForm')->withErrors(['error' => 'cannot register']);
         }
     }
 
